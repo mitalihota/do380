@@ -1,0 +1,23 @@
+1.cat get_nodes
+oc get nodes -o jsonpath='{.items[0].metadata.name}'
+2 cat get-nodes-space
+oc get nodes  -o jsonpath='{.items[0].metadata.name}{"\n"}{"\n"}'
+3.cat get-nodes-ip
+oc get nodes  -o jsonpath='{.items[0].metadata.name}{"\t"}{.items[0].status.addresses[0].address}{"\n"}'
+4.cat get-all-nodes
+oc get nodes -o jsonpath='{.items[*].metadata.name}{"\t"}{.items[*].status.addresses[0].address}{"\n"}'
+5. cat get-all-nodes-sorted
+oc get nodes -o jsonpath='{range.items[*]}{"\n"}{.metadata.name}{"\t"}{.status.addresses[0].address}{end}{"\n"}'
+6.
+apiVersion: v1
+kind: pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+    - name: test-pod
+      image: quay.io/mitalihota/fedora-htttpd-ocp:1
+
+
+cat pod-fail
+oc get pods -o jsonpath='{range.items[?(@.status.containerStatuses[*].started==false)]}''{.metadata.name}''{"\t"}''{.status.containerStatuses[*].state.waiting.reason}}''{end}''{"\n"}'
