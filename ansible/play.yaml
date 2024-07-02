@@ -5,21 +5,44 @@
     namespace: opengame
   module_defaults:
     group/k8s:
-     namespace: "{{ namespace }}"
+      namespace: "{{ namespace }}"
       ca_cert: "/etc/pki/tls/certs/ca-bundle.crt"
   tasks:
     - name: Create the project
       k8s:
-      api_version: project.openshift.io/v1
+        api_version: project.openshift.io/v1
         kind: Project
         name: "{{ namespace }}"
         state: present
         namespace: ""
 
-    - name: Create objects from the manifest
+    - name: Create serviceaccount object from the manifest
       k8s:
         state: present
-        src: "{{ playbook_dir + '/hello.yml' }}"
+        src: "{{ playbook_dir + '/serviceaccount.yaml' }}"
+
+    - name: Create rbac object from the manifest
+      k8s:
+        state: present
+        src: "{{ playbook_dir + '/rbac.yaml' }}"
+
+
+    - name: Create deployment objects from the manifest
+      k8s:
+        state: present
+        src: "{{ playbook_dir + '/deploy.yaml' }}"
+
+
+    - name: Create service object from the manifest
+      k8s:
+        state: present
+        src: "{{ playbook_dir + '/svc.yaml' }}"
+
+
+    - name: Create route objects from the manifest
+      k8s:
+        state: present
+        src: "{{ playbook_dir + '/route.yaml' }}"
 
     - name: Get a info about all of the pods in the namespace
       k8s_info:
@@ -28,13 +51,13 @@
     - name: Scale deployment up
       k8s_scale:
         kind: Deployment
-        name: ''
+        name: 'app2048-deploy'
         replicas: 1
 
     - name: Get hostname of the route
       k8s_info:
         kind: Route
-        name: ''
+        name: 'game'
       register: route
 
     - name: Test access to the app
@@ -49,3 +72,5 @@
     - name: Display response of the application
       debug:
         var: response.content
+
+   
