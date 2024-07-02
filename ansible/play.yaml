@@ -30,13 +30,13 @@
     - name: Create deployment objects from the manifest
       k8s:
         state: present
-        src: "{{ playbook_dir + '/deploy.yaml' }}"
+        src: "{{ playbook_dir + '/deployment.yaml' }}"
 
 
     - name: Create service object from the manifest
       k8s:
         state: present
-        src: "{{ playbook_dir + '/svc.yaml' }}"
+        src: "{{ playbook_dir + '/service.yaml' }}"
 
 
     - name: Create route objects from the manifest
