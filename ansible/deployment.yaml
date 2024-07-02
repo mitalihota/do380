@@ -23,7 +23,7 @@ spec:
         deployment: app2048-deploy
     spec:
       containers:
-      - image: registry.ocp4.example.com:8443/redhattraining/hello-world-nginx:v1.0
+      - image: quay.io/amkhan_16nw/docker-2048
         imagePullPolicy: IfNotPresent
         name: app2048-deploy
         ports:
