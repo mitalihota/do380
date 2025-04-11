@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: heartbeat-agent
+spec:
+  selector:
+    matchLabels:
+      app: heartbeat-agent
+  template:
+    metadata:
+      labels:
+        app: heartbeat-agent
+    spec:
+      containers:
+      - name: heartbeat
+        image: registry.ocp4.example.com:8443/redhattraining/hello-world-nginx:v1.0
+        command: ["/bin/bash", "-c", "echo Hello from $(hostname) && sleep 3600"]
+        securityContext:
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+        resources:
+          limits:
+            memory: 64Mi
+            cpu: 50m
+
